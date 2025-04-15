@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../../database/db");
 const bcrypt = require("bcrypt");
 
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => {
   const { nome, senha } = req.body;
 
   if (!nome || !senha) {
@@ -55,6 +55,33 @@ router.post("/login", async (req, res) => {
 router.post("/logout", (req, res) => {
   req.session.destroy();
   res.json({ success: true, message: "Sessão finalizada com sucesso." });
+});
+
+// Verificar sessão atual
+router.get("/me", async (req, res) => {
+  const usuarioSessao = req.session?.usuario;
+
+  if (!usuarioSessao) {
+    return res.status(401).json({ message: "Não autenticado" });
+  }
+
+  try {
+    // Buscar no banco para pegar o pa_numero, se necessário
+    const result = await db.query(
+      "SELECT nome, tipo, pa_numero FROM usuarios WHERE id = $1",
+      [usuarioSessao.id]
+    );
+    const usuario = result.rows[0];
+
+    res.json({
+      id: usuarioSessao.id,
+      nome: usuario.nome,
+      tipo: usuario.tipo,
+      pa_numero: usuario.tipo === "operador" ? usuario.pa_numero : null,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Erro ao buscar dados do usuário" });
+  }
 });
 
 module.exports = router;
