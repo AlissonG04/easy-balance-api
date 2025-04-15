@@ -92,4 +92,11 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+//Excluir Usuário
+router.delete("/:id", adminOnly, async (req, res) => {
+  const { id } = req.params;
+  await db.query("DELETE FROM usuarios WHERE id = $1", [id]);
+  res.json({ success: true, message: "Usuário excluído com sucesso." });
+});
+
 module.exports = router;
