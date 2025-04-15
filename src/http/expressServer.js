@@ -2,22 +2,21 @@ const express = require("express");
 const session = require("express-session");
 const authRoutes = require("./routes/auth");
 const usuariosRoutes = require("./routes/usuarios");
-require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-app.use("/api/usuarios", usuariosRoutes);
 
-// Sessão simples (opcional)
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "easy_balance_secret",
+    secret: process.env.SESSION_SECRET || "easy_balance_super_secreto",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: { secure: false }, // colocar true se for HTTPS
   })
 );
 
 // Rotas
-app.use("/api", authRoutes);
+app.use("/api/login", authRoutes);
+app.use("/api/usuarios", usuariosRoutes);
 
 module.exports = app;

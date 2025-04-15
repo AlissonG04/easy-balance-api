@@ -25,12 +25,18 @@ router.post("/login", async (req, res) => {
     }
 
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
-
     if (!senhaCorreta) {
       return res
         .status(401)
         .json({ success: false, message: "Senha incorreta." });
     }
+
+    // Salvando dados do usuário na sessão
+    req.session.usuario = {
+      id: usuario.id,
+      nome: usuario.nome,
+      tipo: usuario.tipo,
+    };
 
     return res.json({
       success: true,
@@ -43,6 +49,12 @@ router.post("/login", async (req, res) => {
       .status(500)
       .json({ success: false, message: "Erro interno do servidor." });
   }
+});
+
+// Rota para logout (opcional)
+router.post("/logout", (req, res) => {
+  req.session.destroy();
+  res.json({ success: true, message: "Sessão finalizada com sucesso." });
 });
 
 module.exports = router;
