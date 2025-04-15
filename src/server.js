@@ -2,7 +2,7 @@ const http = require("http");
 const app = require("./http/expressServer");
 const criarServidorSocket = require("./ws/socketServer");
 
-const iniciarTcpServer = require("./tcp/tcpServer");
+const iniciarClientesBalanças = require("./tcp/tcpServer");
 require("dotenv").config();
 
 const PORTA_WEB = process.env.PORTA_WEB || 3000;
@@ -13,7 +13,7 @@ const server = http.createServer(app);
 criarServidorSocket(server);
 
 // Iniciar TCP
-iniciarTcpServer();
+iniciarClientesBalanças();
 
 // Iniciar HTTP
 server.listen(PORTA_WEB, () => {
