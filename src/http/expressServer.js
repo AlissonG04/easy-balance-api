@@ -1,10 +1,12 @@
 const express = require("express");
 const session = require("express-session");
 const authRoutes = require("./routes/auth");
+const usuariosRoutes = require("./routes/usuarios");
 require("dotenv").config();
 
 const app = express();
 app.use(express.json());
+app.use("/api/usuarios", usuariosRoutes);
 
 // Sessão simples (opcional)
 app.use(
