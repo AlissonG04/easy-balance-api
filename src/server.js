@@ -1,6 +1,6 @@
 const http = require("http");
 const app = require("./http/expressServer");
-const criarServidorSocket = require("./ws/socketServer");
+const { criarServidorSocket } = require("./ws/socketServer");
 
 const iniciarClientesBalanças = require("./tcp/tcpServer");
 require("dotenv").config();

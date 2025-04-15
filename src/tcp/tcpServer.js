@@ -1,4 +1,5 @@
 const net = require("net");
+const { emitirPeso } = require("../ws/socketServer");
 require("dotenv").config();
 
 function conectarBalança(id, ip, porta) {
@@ -15,10 +16,10 @@ function conectarBalança(id, ip, porta) {
 
   socket.on("data", (data) => {
     const peso = data.toString().trim();
-    console.log(`Peso recebido da ${id}: ${peso}`);
+    console.log(`⚖️ Peso recebido da ${id}: ${peso}`);
 
-    // Aqui você pode emitir via WebSocket, salvar no banco, etc.
-    // Ex: io.emit('peso-atualizado', { balanca: id, peso });
+    // Emitir via WebSocket
+    emitirPeso(id, peso);
   });
 
   socket.on("error", (err) => {
@@ -31,7 +32,7 @@ function conectarBalança(id, ip, porta) {
     setTimeout(reconectar, 5000);
   });
 
-  reconectar(); // inicia a conexão
+  reconectar();
 }
 
 function iniciarClientesBalanças() {
