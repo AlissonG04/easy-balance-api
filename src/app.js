@@ -2,13 +2,17 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const authRoutes = require("./routes/authRoutes");
+
 const app = express();
 
-// Middlewares principais
+// Middlewares
 app.use(cors());
-app.use(express.json()); // Body parser para JSON
+app.use(express.json());
 
 // Rotas
+app.use("/api/auth", authRoutes);
+
 app.get("/", (req, res) => {
   res.send("Easy Balance API funcionando");
 });
