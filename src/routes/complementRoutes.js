@@ -9,5 +9,6 @@ router.post("/", authMiddleware, ComplementController.create);
 router.get("/pending", authMiddleware, ComplementController.listPending);
 router.put("/:id/accept", authMiddleware, ComplementController.accept);
 router.put("/:id/reject", authMiddleware, ComplementController.reject);
+router.put("/:id/complete", authMiddleware, ComplementController.complete);
 
 module.exports = router;

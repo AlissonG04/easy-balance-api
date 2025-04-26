@@ -107,6 +107,37 @@ const ComplementController = {
       res.status(500).json({ message: "Erro interno no servidor." });
     }
   },
+
+  async complete(req, res) {
+    const { id } = req.params;
+    const { grossFinal } = req.body;
+
+    try {
+      const complement = await ComplementModel.findById(id);
+
+      if (!complement) {
+        return res
+          .status(404)
+          .json({ message: "Solicitação de complemento não encontrada." });
+      }
+
+      if (complement.status !== "aceito") {
+        return res
+          .status(400)
+          .json({ message: "Só é possível finalizar complementos aceitos." });
+      }
+
+      const updated = await ComplementModel.completeComplement(id, grossFinal);
+
+      const io = req.app.get("io");
+      io.emit("complement-completed", updated);
+
+      res.json(updated);
+    } catch (error) {
+      console.error("Erro ao finalizar complemento:", error);
+      res.status(500).json({ message: "Erro interno no servidor." });
+    }
+  },
 };
 
 module.exports = ComplementController;

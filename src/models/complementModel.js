@@ -42,6 +42,20 @@ const ComplementModel = {
     const { rows } = await pool.query(query, [id]);
     return rows[0];
   },
+
+  async completeComplement(id, grossFinal) {
+    const query = `
+      UPDATE complement_requests
+      SET status = 'concluido',
+          gross_final = $1,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $2
+      RETURNING *
+    `;
+    const values = [grossFinal, id];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+  },
 };
 
 module.exports = ComplementModel;
