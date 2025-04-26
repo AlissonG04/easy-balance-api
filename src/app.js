@@ -5,6 +5,8 @@ require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const complementRoutes = require("./routes/complementRoutes");
 
+const userRoutes = require("./routes/userRoutes");
+
 const app = express();
 
 // Middlewares
@@ -14,6 +16,7 @@ app.use(express.json());
 // Rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/complements", complementRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Easy Balance API funcionando");
