@@ -23,7 +23,7 @@ const ComplementController = {
 
       res.status(201).json(complement);
     } catch (error) {
-      console.error("❌ ERRO DETALHADO:", error); // <= aqui, printa erro completo no console
+      console.error("ERRO DETALHADO:", error);
       res.status(500).json({ message: "Erro interno no servidor." });
     }
   },
