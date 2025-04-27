@@ -138,6 +138,16 @@ const ComplementController = {
       res.status(500).json({ message: "Erro interno no servidor." });
     }
   },
+  //Listar todos os complementos
+  async listAll(req, res) {
+    try {
+      const complements = await ComplementModel.getAllComplements();
+      res.json(complements);
+    } catch (error) {
+      console.error("Erro ao listar todos complementos:", error);
+      res.status(500).json({ message: "Erro interno no servidor." });
+    }
+  },
 };
 
 module.exports = ComplementController;

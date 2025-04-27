@@ -56,6 +56,13 @@ const ComplementModel = {
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
+  //Buscar todos os complementos
+  async getAllComplements() {
+    const { rows } = await pool.query(
+      "SELECT * FROM complement_requests ORDER BY created_at DESC"
+    );
+    return rows;
+  },
 };
 
 module.exports = ComplementModel;
