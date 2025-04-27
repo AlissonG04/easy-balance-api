@@ -63,10 +63,13 @@ const ComplementController = {
           .json({ message: "Solicitação já foi processada." });
       }
 
+      const brutoDesejado = complement.tara + complement.liquid;
+
       const updated = await ComplementModel.updateComplementStatus(
         id,
         "aceito",
-        respondedBy
+        respondedBy,
+        brutoDesejado
       );
 
       const io = req.app.get("io");

@@ -23,16 +23,28 @@ const ComplementModel = {
     return rows;
   },
 
-  async updateComplementStatus(id, status, respondedBy) {
-    const query = `
-      UPDATE complement_requests
-      SET status = $1,
-          responded_by = $2,
-          updated_at = CURRENT_TIMESTAMP
-      WHERE id = $3
-      RETURNING *
-    `;
-    const values = [status, respondedBy, id];
+  async updateComplementStatus(id, status, respondedBy, brutoDesejado = null) {
+    let query;
+    let values;
+
+    if (status === "aceito" && brutoDesejado !== null) {
+      query = `
+        UPDATE complement_requests
+        SET status = $1, responded_by = $2, bruto_desejado = $3, accepted_at = NOW()
+        WHERE id = $4
+        RETURNING *
+      `;
+      values = [status, respondedBy, brutoDesejado, id];
+    } else {
+      query = `
+        UPDATE complement_requests
+        SET status = $1, responded_by = $2
+        WHERE id = $3
+        RETURNING *
+      `;
+      values = [status, respondedBy, id];
+    }
+
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
