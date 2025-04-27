@@ -5,8 +5,14 @@ const ComplementController = {
     const { balanceId, plate, tara, liquid } = req.body;
     const requestedBy = req.user.id;
 
-    if (!balanceId || !plate || !tara || !liquid) {
+    if (!balanceId || !plate || tara == null || liquid == null) {
       return res.status(400).json({ message: "Campos obrigatórios ausentes." });
+    }
+
+    if (isNaN(tara) || isNaN(liquid)) {
+      return res
+        .status(400)
+        .json({ message: "Tara e Líquido precisam ser números válidos." });
     }
 
     try {
@@ -14,8 +20,8 @@ const ComplementController = {
         balanceId,
         requestedBy,
         plate,
-        tara,
-        liquid,
+        tara: Number(tara),
+        liquid: Number(liquid),
       });
 
       const io = req.app.get("io");
