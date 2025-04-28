@@ -119,7 +119,7 @@ const ComplementController = {
 
   async complete(req, res) {
     const { id } = req.params;
-    const { grossFinal } = req.body;
+    const respondedBy = req.user.id;
 
     try {
       const complement = await ComplementModel.findById(id);
@@ -133,20 +133,27 @@ const ComplementController = {
       if (complement.status !== "aceito") {
         return res
           .status(400)
-          .json({ message: "Só é possível finalizar complementos aceitos." });
+          .json({
+            message: "Somente complementos aceitos podem ser finalizados.",
+          });
       }
 
-      const updated = await ComplementModel.completeComplement(id, grossFinal);
+      const updated = await ComplementModel.updateComplementStatus(
+        id,
+        "completo",
+        respondedBy
+      );
 
       const io = req.app.get("io");
       io.emit("complement-completed", updated);
 
       res.json(updated);
     } catch (error) {
-      console.error("Erro ao finalizar complemento:", error);
+      console.error("Erro ao completar complemento:", error);
       res.status(500).json({ message: "Erro interno no servidor." });
     }
   },
+
   //Listar todos os complementos
   async listAll(req, res) {
     try {
