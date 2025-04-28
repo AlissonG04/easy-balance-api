@@ -131,11 +131,9 @@ const ComplementController = {
       }
 
       if (complement.status !== "aceito") {
-        return res
-          .status(400)
-          .json({
-            message: "Somente complementos aceitos podem ser finalizados.",
-          });
+        return res.status(400).json({
+          message: "Somente complementos aceitos podem ser finalizados.",
+        });
       }
 
       const updated = await ComplementModel.updateComplementStatus(
